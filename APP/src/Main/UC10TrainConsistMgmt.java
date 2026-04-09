@@ -1,5 +1,4 @@
 import java.util.*;
-import java.util.stream.Collectors;
 
 // Passenger Bogie Class
 class PassengerBogie {
@@ -13,16 +12,16 @@ class PassengerBogie {
         this.capacity = capacity;
     }
 
+    public int getCapacity() {
+        return capacity;
+    }
+
     public String getType() {
         return type;
     }
 
     public String getBogieId() {
         return bogieId;
-    }
-
-    public int getCapacity() {
-        return capacity;
     }
 
     public void displayDetails() {
@@ -32,14 +31,15 @@ class PassengerBogie {
     }
 }
 
-// UC9 Main Class
-public class UC9TrainConsistMgmt {
+// UC10 Main Class
+public class UC10TrainConsistMgmt {
 
-    // Group bogies by type
-    public static Map<String, List<PassengerBogie>> groupBogiesByType(List<PassengerBogie> bogies) {
+    // Method to calculate total seating capacity
+    public static int calculateTotalSeats(List<PassengerBogie> bogies) {
 
         return bogies.stream()
-                .collect(Collectors.groupingBy(PassengerBogie::getType));
+                .map(b -> b.getCapacity())   // extract capacity
+                .reduce(0, Integer::sum);   // aggregate (sum)
     }
 
     public static void main(String[] args) {
@@ -52,13 +52,11 @@ public class UC9TrainConsistMgmt {
         bogies.add(new PassengerBogie("B4", "Sleeper", 80));
         bogies.add(new PassengerBogie("B5", "AC Chair", 65));
 
-        Map<String, List<PassengerBogie>> grouped = groupBogiesByType(bogies);
+        System.out.println("=== Bogies ===");
+        bogies.forEach(PassengerBogie::displayDetails);
 
-        System.out.println("=== Grouped Bogies ===");
+        int totalSeats = calculateTotalSeats(bogies);
 
-        for (String type : grouped.keySet()) {
-            System.out.println("\nType: " + type);
-            grouped.get(type).forEach(PassengerBogie::displayDetails);
-        }
+        System.out.println("\nTotal Seating Capacity: " + totalSeats);
     }
 }

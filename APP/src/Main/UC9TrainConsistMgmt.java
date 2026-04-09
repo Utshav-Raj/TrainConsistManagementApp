@@ -13,16 +13,16 @@ class PassengerBogie {
         this.capacity = capacity;
     }
 
-    public int getCapacity() {
-        return capacity;
+    public String getType() {
+        return type;
     }
 
     public String getBogieId() {
         return bogieId;
     }
 
-    public String getType() {
-        return type;
+    public int getCapacity() {
+        return capacity;
     }
 
     public void displayDetails() {
@@ -32,18 +32,16 @@ class PassengerBogie {
     }
 }
 
-// UC8 Main Class
-class UC8TrainConsistMgmt {
+// UC9 Main Class
+public class UC9TrainConsistMgmt {
 
-    // Method to filter bogies using Stream API
-    public static List<PassengerBogie> filterBogiesByCapacity(List<PassengerBogie> bogies, int threshold) {
+    // Group bogies by type
+    public static Map<String, List<PassengerBogie>> groupBogiesByType(List<PassengerBogie> bogies) {
 
         return bogies.stream()
-                .filter(b -> b.getCapacity() > threshold)
-                .collect(Collectors.toList());
+                .collect(Collectors.groupingBy(PassengerBogie::getType));
     }
 
-    // Main method (Demo run)
     public static void main(String[] args) {
 
         List<PassengerBogie> bogies = new ArrayList<>();
@@ -54,12 +52,13 @@ class UC8TrainConsistMgmt {
         bogies.add(new PassengerBogie("B4", "Sleeper", 80));
         bogies.add(new PassengerBogie("B5", "AC Chair", 65));
 
-        System.out.println("=== Original Bogies ===");
-        bogies.forEach(PassengerBogie::displayDetails);
+        Map<String, List<PassengerBogie>> grouped = groupBogiesByType(bogies);
 
-        List<PassengerBogie> filtered = filterBogiesByCapacity(bogies, 60);
+        System.out.println("=== Grouped Bogies ===");
 
-        System.out.println("\n=== Filtered Bogies (Capacity > 60) ===");
-        filtered.forEach(PassengerBogie::displayDetails);
+        for (String type : grouped.keySet()) {
+            System.out.println("\nType: " + type);
+            grouped.get(type).forEach(PassengerBogie::displayDetails);
+        }
     }
 }
